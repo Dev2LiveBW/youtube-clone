@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import Sidebar from "./Sidebar";
+import { Sidebar, Videos } from "./index";
+import { fetchFromAPI } from "../utils/fetchFromApi";
 
 const Feed = () => {
+  const [selectedCategory, setSelectedCategory] = useState("Gym");
+
+  useEffect(() => {
+    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`);
+  }, [selectedCategory]);
+
   return (
     <Stack
       sx={{
@@ -16,7 +23,10 @@ const Feed = () => {
           px: { sx: 0, md: 2 },
         }}
       >
-        <Sidebar />
+        <Sidebar
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
         <Typography
           className="copyright"
           variant="body2"
@@ -32,8 +42,9 @@ const Feed = () => {
           mb={2}
           sx={{ color: "white" }}
         >
-          Gym <spam style={{ color: "#F31503" }}>Videos</spam>
+          {selectedCategory} <spam style={{ color: "#F31503" }}>Videos</spam>
         </Typography>
+        <Videos videos={[]} />
       </Box>
     </Stack>
   );
